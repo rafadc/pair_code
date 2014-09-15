@@ -20,18 +20,21 @@ class Subtitles
 
 	def time_shift(shift_in_ms)
 		subtitle_array = file_to_array
+		shifted_file = File.new("shifted_file.srt", "w+")
+		
+		subtitle_array.each do |subtitle|
+			formatted_time = subtitle.lines.at(1)
 
-		subtitle_array.each do |sub|
-			full_time = sub.lines.at(1)
+			start_time = shift_in_ms + time_to_ms(formatted_time[0..11])
+			end_time = shift_in_ms + time_to_ms(formatted_time[17..28])
 
-			start_time = shift_in_ms + time_to_ms(full_time[0..11])
-			end_time = shift_in_ms + time_to_ms(full_time[17..28])
+			formatted_time = format_time(start_time) + " --> " + format_time(end_time)
+			
+			subtitle.sub!(subtitle.lines.at(1), formatted_time + "\n")
 
-			full_time[0..11] = format_time(start_time)
-			full_time[17..28] = format_time(end_time)
-			puts full_time
-
+			shifted_file << subtitle + "\n\n"
 		end
+
 	end
 
 	def time_to_ms(org_time)
@@ -49,4 +52,4 @@ end
 
 newSubs = Subtitles.new("sample.txt")
 
-newSubs.time_shift(2500)
+newSubs.time_shift(700000)
