@@ -22,7 +22,8 @@ def caesar_cipher(message, direction, shift=3)
 		cipher += ordinal.chr
 	end
 
-	puts cipher
+
+	puts "Your encryped phrase is: " + cipher
 
 end
 
