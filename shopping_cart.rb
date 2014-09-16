@@ -1,48 +1,46 @@
 require 'pry'
 require 'date'
 
+def season(date)
+	if [12,1,2].include?(date.month)
+		return "winter"
+	elsif [3,4,5].include?(date.month)
+		return "spring"
+	elsif [6,7,8].include?(date.month)
+		return "summer"
+	else
+		return "fall"
+	end
+end
+
 class ShoppingCart
-	@@prices = { }
 
 	def initialize
 		@cart = { :apple => 0, :oranges => 0, :grapes => 0, :banana => 0, :watermelon => 0 }
 		@cart_cost = 0
 		@date = Time.now
-		@season = season
-
-	end
-
-	def season
-		if [12,1,2].include?(@date.month)
-			return "winter"
-		elsif [3,4,5].include?(@date.month)
-			return "spring"
-		elsif [6,7,8].include?(@date.month)
-			return "summer"
-		else
-			return "fall"
-		end
-	end
-
-	def get_prices
-		@@prices[:apple] = Apple.new.price(@season)
-		@@prices[:oranges] = Orange.new.price(@season)
-		@@prices[:grapes] = Grapes.new.price(@season)
-		@@prices[:banana] = Banana.new.price(@season)
-		@@prices[:watermelon] = Watermelon.new.price(@date)
+		@season = season(@date)
+		@item_details = {
+			apple: Apple.new,
+			oranges: Orange.new,
+			grapes: Grapes.new,
+			banana: Banana.new,
+			watermelon: Watermelon.new
+		}
 	end
 
 	def add_discount
-		discount = Apple.new.discount(@cart) + Orange.new.discount(@cart) + Grapes.new.discount(@cart)
+		discount = @item_details[:apple].discount(@cart) + @item_details[:oranges].discount(@cart, @date,  @season) + @item_details[:grapes].discount(@cart, @date, @season)
 		@cart_cost -= discount.to_i
 	end
 
 	def cost
 		@cart.each do |fruit, qty|
-			@cart_cost += qty * @@prices[fruit]
+			@cart_cost += qty * @item_details[fruit].price(@date, @season)
 		end
 
 		add_discount
+		@cart_cost
 	end
 
 	def add(fruit,units=1)
@@ -50,15 +48,12 @@ class ShoppingCart
 	end
 
 	def print_cart
-		get_prices
-		cost
-		@cart.each {|key, value| puts "#{key} is #{value} price is #{@@prices[key]}" }
-		puts "The price of your cart is: " + @cart_cost.to_s
+		puts "The price of your cart is: #{cost}" 
 	end
 end
 
-class Apple < ShoppingCart
-	def price(season)
+class Apple
+	def price(date, season)
 		case season 
 			when "winter" then 12
 			when "fall" then 15
@@ -66,53 +61,53 @@ class Apple < ShoppingCart
 		end
 	end
 
-	def discount(cart)
+	def discount(cart, date, season)
 		discount = 0
 		if cart[:apple] >= 2
-			discount += @@prices[:apple] * (cart[:apple] / 2)
+			discount += price(date, season) * (cart[:apple] / 2)
 		end
 		return discount
 	end
 end
 
-class Orange < ShoppingCart
-	def price(season)
+class Orange
+	def price(date, season)
 		case season 
 			when "summer" then 2
 			else 5
 		end
 	end
 
-	def discount(cart)
+	def discount(cart, date, season)
 		discount = 0
 
 		if cart[:oranges] >= 3
-			discount += @@prices[:oranges] * (cart[:oranges] / 3)
+			discount += price(date, season) * (cart[:oranges] / 3)
 		end
 		return discount
 	end
 end
 
-class Grapes < ShoppingCart
-	def price(season)
+class Grapes
+	def price(date, season)
 		return 15
 	end
 
-	def discount(cart)
+	def discount(cart, date, season)
 		discount = 0
 
 		if cart[:grapes] >= 4 && cart[:banana] > 0
-			discount += @@prices[:banana] * (cart[:grapes] / 4)
-			if discount > @@prices[:banana] * cart[:banana]
-				discount = @@prices[:banana] * cart[:banana]
+			discount += price(date, season) * (cart[:grapes] / 4)
+			if discount > price(date, season) * cart[:banana]
+				discount = price(date, season) * cart[:banana]
 			end
 		end
 		return discount
 	end
 end
 
-class Banana < ShoppingCart
-	def price(season)
+class Banana
+	def price(date, season)
 		case season 
 			when "winter" then 21
 			else 20
@@ -120,8 +115,8 @@ class Banana < ShoppingCart
 	end
 end
 
-class Watermelon < ShoppingCart
-	def price(date)
+class Watermelon
+	def price(date, season)
 		if date.sunday?
 			return 100
 		else
