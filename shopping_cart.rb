@@ -33,7 +33,7 @@ class ShoppingCart
 	end
 
 	def add_discount
-		discount = Apple.new.discount(@cart, ) + Orange.new.discount(@cart) + Grapes.new.discount(@cart)
+		discount = Apple.new.discount(@cart) + Orange.new.discount(@cart) + Grapes.new.discount(@cart)
 		@cart_cost -= discount.to_i
 	end
 
