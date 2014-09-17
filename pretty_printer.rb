@@ -5,6 +5,7 @@ class PrintInput
 	def initialize(user_input)
 		@input_object = user_input
     @level_child = 1
+    @hash_level
 	end
 
   def print
@@ -27,6 +28,7 @@ class PrintInput
 			elsif element.is_a? Array
         print_array(element)
 			elsif element.is_a? Hash
+        print_hash(element)
       else
         puts "I don't know how to print this object."
 			end
@@ -51,7 +53,14 @@ class PrintInput
     @level_child -= 1  
   end
 
+  def print_hash(hash)
+    puts "  " * (@level_child) + "Hash: level " + @level_child.to_s
+    hash.each do |key, value|
+      puts ("  " * (@level_child + 1)) + key.to_s + " --> " + value.to_s
+    end
+  end
+
 end
 
-array_data = ["hi", Date.today, 5, [1, 2, 3, [3, 4, 5, [6, 7, 8]]], ["hi", "what's", "up"]]
+array_data = ["hi", Date.today, 5, [1, 2, 3, [3, 4, 5, [6, 7, 8]]], ["hi", "what's", "up"], { :apple => [6, 7, 8], :oranges => 0, :grapes => 0, :banana => 0, :watermelon => 0 }]
 array = PrintInput.new(array_data).print
