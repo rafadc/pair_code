@@ -5,7 +5,6 @@ class PrintInput
 	def initialize(user_input)
 		@input_object = user_input
     @level_child = 1
-    @hash_level
 	end
 
   def print_pretty
@@ -16,19 +15,14 @@ class PrintInput
     end
   end
 
-	def process_array(array_for_print) 
-		puts "  "* (@level_child - 1) + "Array: level " + @level_child.to_s
-    array_for_print.each do |element|
-			check_class(element)
-		end
-	end
-
   def check_class(element)
     if element.is_a? String
-        print_string(element)
+      print_string(element)
     elsif element.is_a? Numeric
       print_number(element)
     elsif element.is_a? Date
+      print_date(element)
+    elsif element.is_a? Time
       print_date(element)
     elsif element.is_a? Array
       print_array(element)
@@ -39,16 +33,20 @@ class PrintInput
     end
   end
 
-	def print_string(string)
-		puts ("  " * @level_child) + string
-	end
+  def indent
+    "  " * @level_child
+  end
+
+  def print_string(string)
+    puts indent + string
+  end
 
   def print_number(number)
-   puts ("  " * @level_child) + number.to_s
+   puts indent + number.to_s
   end
 
   def print_date(date)
-    puts ("  " * @level_child) + date.to_s
+    puts indent + date.day.to_s + "-" + date.month.to_s + "-" + date.year.to_s
   end
 
   def print_array(array)
@@ -57,11 +55,18 @@ class PrintInput
     @level_child -= 1  
   end
 
+	def process_array(array_for_print) 
+		puts ("  " * (@level_child - 1)) + "Array:"
+    array_for_print.each do |element|
+			check_class(element)
+		end
+	end
+
   def print_hash(hash)
     @level_child += 1
-    puts "  " * (@level_child) + "Hash: level " + @level_child.to_s
+    puts indent + "Hash:"
     hash.each do |key, value|
-      print ("  " * (@level_child + 1)) + key.to_s + " -->" 
+      print ("  " + indent) + key.to_s + " --> " 
       check_class(value)
     end
     @level_child -= 1  
