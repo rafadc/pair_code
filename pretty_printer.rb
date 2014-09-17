@@ -46,7 +46,7 @@ class PrintInput
   end
 
   def print_date(date)
-    puts indent + date.day.to_s + "-" + date.month.to_s + "-" + date.year.to_s
+    puts indent + date.strftime("%d-%m-%Y")
   end
 
   def print_array(array)
