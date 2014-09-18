@@ -1,24 +1,20 @@
 class Board
 	def initialize(filename)
-		@board_file = File.open(filename)
-		@board = array_to_hash
+		@board = board_to_hash(File.open(filename))
 
 	end
 
 	def file_to_array(board_file)
-		board_array = []
-		board_file.each do |line|
-			temp_array = line.split(" ")
-			board_array.push(temp_array)
+		board_file.each_with_object([]) do |line, board_array|
+			board_array << line.split(" ")
 		end
-		return board_array.reverse!
 	end
 
-	def array_to_hash
-		array = file_to_array(@board_file)
-		temp_hash = Hash.new
+	def board_to_hash(board)
+		array = file_to_array(board)
+		temp_hash = {}
 		("a".."h").each_with_index do |x, index|
-			temp_hash[x] = Hash.new
+			temp_hash[x] = {}
 			array[index].each_with_index do |element, index|
 				temp_hash[x][index] = element
 			end
