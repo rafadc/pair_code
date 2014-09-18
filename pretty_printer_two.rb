@@ -50,4 +50,4 @@ class DefaultPrinter
   end
 end
 
-a = PrettyPrinter.new([1, 2, 3, "Hello", [1,2,3], "Hi", Date.today]).print_me
+a = PrettyPrinter.new([1, 2, 3, "Hello", [1,2,[1,2,3]], "Hi", Date.today, "Sup"]).print_me
