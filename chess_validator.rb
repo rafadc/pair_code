@@ -15,7 +15,7 @@ class Board
 		("a".."h").each_with_index do |x, index|
 			temp_hash[x] = {}
 			array[index].each_with_index do |element, index|
-				temp_hash[x][index] = element
+				temp_hash[x][index] = PieceFactory.from_description element
 			end
 		end
 		return temp_hash
@@ -50,14 +50,6 @@ class Board
 		# puts square
 	end
 
-	def piece_color(square)
-		if square[0] == "b"
-			return :black
-		else
-			return :white
-		end
-	end
-
 	def check_space(square)
 		a = square[0]
 		b = square[1].to_i - 1
@@ -71,7 +63,11 @@ class Board
 
 end
 
-class Pawn
+class Piece
+	attr_accessor :color
+end
+
+class Pawn < Piece
 	def move_black
 	end
 
@@ -79,7 +75,7 @@ class Pawn
 	end
 end
 
-class Bishop
+class Bishop < Piece
 	def move_black
 	end
 
@@ -87,7 +83,7 @@ class Bishop
 	end
 end
 
-class Knight
+class Knight < Piece
 	def move_black
 	end
 
@@ -95,7 +91,7 @@ class Knight
 	end
 end
 
-class Queen
+class Queen < Piece
 	def move_black
 	end
 
@@ -103,7 +99,7 @@ class Queen
 	end
 end
 
-class King
+class King < Piece
 	def move_black
 	end
 
