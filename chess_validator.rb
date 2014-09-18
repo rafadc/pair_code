@@ -1,6 +1,7 @@
 class Board
-	def initialize(filename)
-		@board = board_to_hash(File.open(filename))
+	def initialize(board_file, moves_file)
+		@board = board_to_hash(File.open(board_file))
+		@moves = file_to_array(File.open(moves_file))
 
 	end
 
@@ -29,6 +30,48 @@ class Board
 			end
 			print "\n"
 		end
+	end
+
+	def print_moves
+		@moves.each do |x|
+			puts x[0] + x[1]
+		end
+	end
+
+	def process_moves
+		@moves.each do |move|
+			validate_move(move)
+		end
+	end
+
+	def validate_move(move)
+		move1 = check_space(move[0])
+		move2 = check_space(move[1])
+		puts move1
+		puts move2
+		# puts square
+	end
+
+	def check_color(square)
+		if square[0] == "b"
+			return "black"
+		else 
+			return "white"
+		end
+	end
+
+	def check_space(square)
+		a = square[0]
+		b = square[1].to_i - 1
+		current_space = @board[a][b]
+		if current_space == "--"
+			return true
+			# puts square + " " + @board[a][b] + " " + false.to_s
+		else 
+			return check_color(current_space)
+			# puts square + " " + @board[a][b] + " " + true.to_s
+		end
+		# puts @board[a][b].class
 	end
 
 end
@@ -73,7 +116,5 @@ class King
 	end
 end
 
-board = Board.new("simple_board.txt").print_board
-
-
-# Board.new("simple_board.txt").array_to_hash
+board = Board.new("simple_board.txt", "simple_moves.txt")
+board.process_moves
