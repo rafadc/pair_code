@@ -50,7 +50,7 @@ class Board
 		# puts square
 	end
 
-	def check_color(square)
+	def piece_color(square)
 		if square[0] == "b"
 			return "black"
 		else
@@ -66,7 +66,7 @@ class Board
 			return true
 			# puts square + " " + @board[a][b] + " " + false.to_s
 		else
-			return check_color(current_space)
+			return piece_color(current_space)
 			# puts square + " " + @board[a][b] + " " + true.to_s
 		end
 		# puts @board[a][b].class
