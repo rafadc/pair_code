@@ -52,24 +52,21 @@ class Board
 
 	def piece_color(square)
 		if square[0] == "b"
-			return "black"
+			return :black
 		else
-			return "white"
+			return :white
 		end
 	end
 
 	def check_space(square)
 		a = square[0]
 		b = square[1].to_i - 1
-		current_space = @board[a][b]
-		if current_space == "--"
-			return true
-			# puts square + " " + @board[a][b] + " " + false.to_s
+		color_of_piece_at_square = @board[a][b]
+		if color_of_piece_at_square == "--"
+			return :empty
 		else
-			return piece_color(current_space)
-			# puts square + " " + @board[a][b] + " " + true.to_s
+			return piece_color(color_of_piece_at_square)
 		end
-		# puts @board[a][b].class
 	end
 
 end
