@@ -6,9 +6,7 @@ class Board
 	end
 
 	def file_to_array(board_file)
-		board_file.each_with_object([]) do |line, board_array|
-			board_array << line.split(" ")
-		end
+		board_file.map{|line| line.split(" ")}
 	end
 
 	def board_to_hash(board)
@@ -55,7 +53,7 @@ class Board
 	def check_color(square)
 		if square[0] == "b"
 			return "black"
-		else 
+		else
 			return "white"
 		end
 	end
@@ -67,7 +65,7 @@ class Board
 		if current_space == "--"
 			return true
 			# puts square + " " + @board[a][b] + " " + false.to_s
-		else 
+		else
 			return check_color(current_space)
 			# puts square + " " + @board[a][b] + " " + true.to_s
 		end
