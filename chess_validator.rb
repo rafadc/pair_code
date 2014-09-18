@@ -16,17 +16,12 @@ class Board
 
 	def array_to_hash
 		array = file_to_array(@board_file)
-		current_array_level = 0
-		current_space_level = 0
-		temp_hash = {}
-		("a".."h").each do |x|
-			temp_hash[x] = {}
-			array[current_array_level].each do |element|
-				temp_hash[x][current_space_level] = element
-				current_space_level += 1
+		temp_hash = Hash.new
+		("a".."h").each_with_index do |x, index|
+			temp_hash[x] = Hash.new
+			array[index].each_with_index do |element, index|
+				temp_hash[x][index] = element
 			end
-			current_array_level += 1
-			current_space_level = 0
 		end
 		return temp_hash
 	end
